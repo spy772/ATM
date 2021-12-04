@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.services;
 
 import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
@@ -6,7 +6,7 @@ import com.atm.model.Account;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class CheckingAccount extends ExtendedTransactions {
+public class CheckingServices extends ExtendedTransactions {
 
     public void checkBalance(Account account) {
         System.out.println("Your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance()));

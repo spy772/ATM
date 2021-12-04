@@ -1,10 +1,13 @@
-package com.atm;
+package com.atm.services;
 
 import com.atm.model.Account;
 
 import java.text.NumberFormat;
 
 public abstract class ExtendedTransactions implements Transactions {
+
+    final public int YEARS = 30;
+    final public  int PERCENT = 100;
 
     public int numOfTransactions;
     public double savingsBalance;

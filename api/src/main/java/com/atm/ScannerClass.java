@@ -3,6 +3,9 @@ package com.atm;
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
+import com.atm.services.BankServices;
+import com.atm.services.CheckingServices;
+import com.atm.services.SavingsServices;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -12,9 +15,9 @@ public class ScannerClass {
 
     public ArrayList<String> prevTransactions = new ArrayList<String>();
     Account account = new Account();
-    BankAccount myAccount = new BankAccount();
-    SavingsAccount mySavingsAccount = new SavingsAccount();
-    CheckingAccount myCheckingAccount = new CheckingAccount();
+    BankServices myAccount = new BankServices();
+    SavingsServices mySavingsServices = new SavingsServices();
+    CheckingServices myCheckingServices = new CheckingServices();
 
     public void prevTransactions(String accountType, String actionType, double moneyAmount) {
         if (accountType == "bank") {
@@ -42,9 +45,9 @@ public class ScannerClass {
         if (accountInput.equals("bank")) {
             myAccount.checkBalance(account);
         } else if (accountInput.equals("savings")) {
-            mySavingsAccount.checkBalance(account);
+            mySavingsServices.checkBalance(account);
         } else if (accountInput.equals("checking")) {
-            myCheckingAccount.checkBalance(account);
+            myCheckingServices.checkBalance(account);
         }
     }
 
@@ -53,9 +56,9 @@ public class ScannerClass {
             if (accountInput.equals("bank")) {
                 myAccount.deposit(moneyInput, account);
             } else if (accountInput.equals("savings")) {
-                mySavingsAccount.deposit(moneyInput, account);
+                mySavingsServices.deposit(moneyInput, account);
             } else if (accountInput.equals("checking")) {
-                myCheckingAccount.deposit(moneyInput, account);
+                myCheckingServices.deposit(moneyInput, account);
             }
 
             prevTransactions(accountInput, "deposit", moneyInput);
@@ -65,9 +68,9 @@ public class ScannerClass {
             if (accountInput.equals("bank")) {
                 myAccount.withdraw(moneyInput, account);
             } else if (accountInput.equals("savings")) {
-                mySavingsAccount.withdraw(moneyInput, account);
+                mySavingsServices.withdraw(moneyInput, account);
             } else if (accountInput.equals("checking")) {
-                myCheckingAccount.withdraw(moneyInput, account);
+                myCheckingServices.withdraw(moneyInput, account);
             }
 
             prevTransactions(accountInput, "withdraw", moneyInput);
@@ -85,8 +88,8 @@ public class ScannerClass {
                 accountScannerPasser = accountScanner;
                 break;
             } else if (accountScanner.startsWith("monthly")) {
-                mySavingsAccount.monthlyFunctionsSavings();
-                myCheckingAccount.monthlyFunctionsChecking();
+                mySavingsServices.monthlyFunctionsSavings();
+                myCheckingServices.monthlyFunctionsChecking();
             } else if (accountScanner.startsWith("previous")) {
                 System.out.println(prevTransactions);
             } else {

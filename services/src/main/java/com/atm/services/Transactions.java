@@ -1,12 +1,9 @@
-package com.atm;
+package com.atm.services;
 
 import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
 
 public interface Transactions {
-
-    final public int YEARS = 30;
-    final public  int PERCENT = 100;
 
     public void checkBalance(Account account);
 
