@@ -88,8 +88,8 @@ public class ScannerClass {
                 accountScannerPasser = accountScanner;
                 break;
             } else if (accountScanner.startsWith("monthly")) {
-                mySavingsServices.monthlyFunctionsSavings();
-                myCheckingServices.monthlyFunctionsChecking();
+                mySavingsServices.monthlyFunctionsSavings(account);
+                myCheckingServices.monthlyFunctionsChecking(account);
             } else if (accountScanner.startsWith("previous")) {
                 System.out.println(prevTransactions);
             } else {

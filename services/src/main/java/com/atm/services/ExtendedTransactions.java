@@ -8,13 +8,8 @@ public abstract class ExtendedTransactions implements Transactions {
 
     final public int YEARS = 30;
     final public  int PERCENT = 100;
-
-    public int numOfTransactions;
-    public double savingsBalance;
-    public double savingsInterest = 0.6 / PERCENT;
-
-    public double checkingBalance;
-    public double checkingInterest = 0.03 / PERCENT;
+    private double savingsInterest = 0.6 / PERCENT;
+    private double checkingInterest = 0.03 / PERCENT;
 
     public void numberOfTransactions(Account account) {
         double afterTransaction = account.getSavingsBalance() - 500;
@@ -27,25 +22,27 @@ public abstract class ExtendedTransactions implements Transactions {
         }
     }
 
-    public void monthlyFunctionsSavings() {
-        numOfTransactions = 0;
-        savingsBalance = savingsBalance * (1 + savingsInterest * YEARS);
-        double calculatedInterest = savingsInterest * (1 + (savingsInterest * YEARS));
-        savingsBalance = savingsBalance - 500;
+    public void monthlyFunctionsSavings(Account account) {
+        account.setNumOfTransactions(0);
+        double afterInterest = account.getSavingsBalance() * (1 + savingsInterest * YEARS);
+        account.setSavingsBalance(afterInterest);
+        double afterMonthlyFee = account.getSavingsBalance() - 500;
+        account.setSavingsBalance(afterMonthlyFee);
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(calculatedInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your account");
-        System.out.println("Your current balance is: " + NumberFormat.getCurrencyInstance().format(savingsBalance));
+        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
+        System.out.println("$500 of monthly maintenance fees have been deducted from your savings account");
+        System.out.println("Your current savings balance is: " + NumberFormat.getCurrencyInstance().format(account.getSavingsBalance()));
     }
 
-    public void monthlyFunctionsChecking() {
-        checkingBalance = checkingBalance * (1 + checkingInterest * YEARS);
-        double calculatedInterest = checkingBalance * (1 + (checkingInterest * YEARS));
-        checkingBalance = checkingBalance - 500;
+    public void monthlyFunctionsChecking(Account account) {
+        double afterInterest = account.getCheckingBalance() * (1 + checkingInterest * YEARS);
+        account.setCheckingBalance(afterInterest);
+        double afterMonthlyFee = account.getCheckingBalance() - 500;
+        account.setCheckingBalance(afterMonthlyFee);
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(calculatedInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your account");
-        System.out.println("Your current balance is: " + NumberFormat.getCurrencyInstance().format(checkingBalance));
+        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
+        System.out.println("$500 of monthly maintenance fees have been deducted from your checking account");
+        System.out.println("Your current checking balance is: " + NumberFormat.getCurrencyInstance().format(account.getCheckingBalance()));
     }
 }
 
