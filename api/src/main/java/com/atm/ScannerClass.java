@@ -6,11 +6,13 @@ import com.atm.model.Account;
 import com.atm.services.BankServices;
 import com.atm.services.CheckingServices;
 import com.atm.services.SavingsServices;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+@Service
 public class ScannerClass {
 
     public ArrayList<String> prevTransactions = new ArrayList<String>();

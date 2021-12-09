@@ -2,14 +2,29 @@ package com.atm;
 
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
 
-public class Main {
+@SpringBootApplication
+public class Main implements CommandLineRunner {
+
+    @Autowired
+    ScannerClass scanningMethods;
 
     public static void main(String[] args) {
+        SpringApplication app = new SpringApplication(Main.class);
+        // disable spring banner
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
+    }
 
-        ScannerClass scanningMethods = new ScannerClass();
+    @Override
+    public void run(String... args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
