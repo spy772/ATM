@@ -1,11 +1,11 @@
 package com.atm.services;
-
 import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
-
+import org.springframework.stereotype.Service;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+@Service
 public class BankServices implements Transactions {
 
     public void checkBalance(Account account) {

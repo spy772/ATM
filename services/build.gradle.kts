@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     implementation(project(":model"))
+    implementation("org.springframework:spring-beans:5.2.6.RELEASE")
+    implementation("org.springframework:spring-context:5.2.6.RELEASE")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

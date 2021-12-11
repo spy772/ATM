@@ -2,10 +2,14 @@ package com.atm.services;
 
 import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
+@Service
 public class SavingsServices extends ExtendedTransactions {
 
     public void checkBalance(Account account) {
