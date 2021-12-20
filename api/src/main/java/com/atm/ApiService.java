@@ -84,12 +84,10 @@ public class ApiService {
     }
 
     public String accountType(String apiAccountInput) throws InvalidInputException {
-        String accountScannerPasser;
+        String accountScannerPasser = "";
 
-        while (true) {
             if (apiAccountInput.equals("bank") || apiAccountInput.equals("savings") || apiAccountInput.equals("checking")) {
                 accountScannerPasser = apiAccountInput;
-                break;
             } else if (apiAccountInput.equals("monthly")) {
                 savingsServices.monthlyFunctionsSavings(account);
                 checkingServices.monthlyFunctionsChecking(account);
@@ -98,7 +96,7 @@ public class ApiService {
             } else {
                 throw new InvalidInputException("You have entered an invalid input; please enter a valid word or check your spelling");
             }
-        }
+
         return accountScannerPasser;
     }
 

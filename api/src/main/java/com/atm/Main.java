@@ -27,22 +27,19 @@ public class Main implements CommandLineRunner {
 
     @GetMapping(value = "/previous")
     public ArrayList<String> previous() {
-        return scanningMethods.prevTransactions;
+        return apiMethods.prevTransactions;
     }
 
-    @RequestMapping(value = "/{id1}/{id2}/{id3}", method = RequestMethod.POST)
-    public String apiTransaction() throws MalformedURLException {
-        URL url1 = new URL("/{id1}");
-        URL url2 = new URL("/{id2}");
-        URL url3 = new URL("/{id3}");
+    @PostMapping(value = "/{id1}/{id2}/{id3}")
+    public String apiTransaction(@PathVariable("id1") String url1, @PathVariable("id2") String url2, @PathVariable("id3") double url3) {
 
         try {
-            String accountScannerPasser = apiMethods.accountType(url1.toString());
-            String transactionScannerPasser = apiMethods.transactionType(accountScannerPasser, url2.toString());
-            // apiMethods.moneyInput(accountScannerPasser, transactionScannerPasser, url3.toString());
+            String accountScannerPasser = apiMethods.accountType(url1);
+            String transactionScannerPasser = apiMethods.transactionType(accountScannerPasser, url2);
+            apiMethods.moneyInput(accountScannerPasser, transactionScannerPasser, url3);
         } catch (InvalidInputException ex) {
             System.out.println(ex.getMessage());
-        } catch (Exception ex) { // C H A N G E  T H I S  B A C K
+        } catch (OverdraftWithdrawlException ex) {
             System.out.println(ex);
         }
 
