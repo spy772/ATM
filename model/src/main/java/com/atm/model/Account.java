@@ -1,5 +1,7 @@
 package com.atm.model;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Account {
 
     private double bankBalance;

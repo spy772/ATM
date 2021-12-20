@@ -7,16 +7,13 @@ import com.atm.services.BankServices;
 import com.atm.services.CheckingServices;
 import com.atm.services.SavingsServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
 @Service
-public class ScannerClass {
+public class ApiService {
 
     @Autowired
     BankServices bankServices;
@@ -27,27 +24,28 @@ public class ScannerClass {
     @Autowired
     CheckingServices checkingServices;
 
-    private ArrayList<String> prevTransactions = new ArrayList<String>();
-    Account account = new Account();
+    @Autowired
+    Account account;
 
+    public ArrayList<String> prevTransactions = new ArrayList<String>();
 
     public void prevTransactions(String accountType, String actionType, double moneyAmount) {
-        if (accountType == "bank") {
-            if (actionType == "deposit") {
+        if (accountType.equals("bank")) {
+            if (actionType.equals("deposit")) {
                 prevTransactions.add(0, "Bank: Deposited " + moneyAmount);
-            } else if (actionType == "withdraw") {
+            } else if (actionType.equals("withdraw")) {
                 prevTransactions.add(0, "Bank: Withdraw " + moneyAmount);
             }
-        } else if (accountType == "savings") {
-            if (actionType == "deposit") {
+        } else if (accountType.equals("savings")) {
+            if (actionType.equals("deposit")) {
                 prevTransactions.add(0, "Savings: Deposited " + moneyAmount);
-            } else if (actionType == "withdraw") {
+            } else if (actionType.equals("withdraw")) {
                 prevTransactions.add(0, "Savings: Withdraw " + moneyAmount);
             }
-        } else if (accountType == "checking") {
-            if (actionType == "deposit") {
+        } else if (accountType.equals("checking")) {
+            if (actionType.equals("deposit")) {
                 prevTransactions.add(0, "Checking: Deposited " + moneyAmount);
-            } else if (actionType == "withdraw") {
+            } else if (actionType.equals("withdraw")) {
                 prevTransactions.add(0, "Checking: Withdraw " + moneyAmount);
             }
         }
@@ -72,8 +70,6 @@ public class ScannerClass {
             } else if (accountInput.equals("checking")) {
                 checkingServices.deposit(moneyInput, account);
             }
-
-            prevTransactions(accountInput, "deposit", moneyInput);
         }
 
         if (transactionInput.equals("withdraw")) {
@@ -84,48 +80,37 @@ public class ScannerClass {
             } else if (accountInput.equals("checking")) {
                 checkingServices.withdraw(moneyInput, account);
             }
-
-            prevTransactions(accountInput, "withdraw", moneyInput);
         }
     }
 
-    public String accountType(Scanner scanner) throws InvalidInputException {
+    public String accountType(String apiAccountInput) throws InvalidInputException {
         String accountScannerPasser;
 
         while (true) {
-            System.out.print("Welcome to the ATM machine, enter \"bank\", \"savings\", \"checking\", \"monthly\" or \"previous\": ");
-            String accountScanner = scanner.next();
-
-            if (accountScanner.startsWith("bank") || accountScanner.startsWith("savings") || accountScanner.startsWith("checking")) {
-                accountScannerPasser = accountScanner;
+            if (apiAccountInput.equals("bank") || apiAccountInput.equals("savings") || apiAccountInput.equals("checking")) {
+                accountScannerPasser = apiAccountInput;
                 break;
-            } else if (accountScanner.startsWith("monthly")) {
+            } else if (apiAccountInput.equals("monthly")) {
                 savingsServices.monthlyFunctionsSavings(account);
                 checkingServices.monthlyFunctionsChecking(account);
-            } else if (accountScanner.startsWith("previous")) {
+            } else if (apiAccountInput.startsWith("previous")) {
                 System.out.println(prevTransactions);
             } else {
                 throw new InvalidInputException("You have entered an invalid input; please enter a valid word or check your spelling");
             }
         }
-
         return accountScannerPasser;
     }
 
-    public String transactionType(String accountInput, Scanner scanner) throws InvalidInputException {
-        String transactionScannerResult;
-
-        while (true) {
-            System.out.print("Welcome to your " + accountInput + " account, enter \"balance\", \"deposit\", \"withdraw\" or \"previous\": ");
-            String transactionScanner = scanner.next();
-
+    public String transactionType(String accountInput, String apiTransactionInput) throws InvalidInputException {
+        String transactionScannerResult = "";
+        
             try {
-                if (transactionScanner.startsWith("deposit") || transactionScanner.startsWith("withdraw")) {
-                    transactionScannerResult = transactionScanner;
-                    break;
-                } else if (transactionScanner.startsWith("balance")) {
+                if (apiTransactionInput.equals("deposit") || apiTransactionInput.equals("withdraw")) {
+                    transactionScannerResult = apiTransactionInput;
+                } else if (apiTransactionInput.equals("balance")) {
                     checkBalance(accountInput, account);
-                } else if (transactionScanner.startsWith("previous")) {
+                } else if (apiTransactionInput.startsWith("previous")) {
                     System.out.println(prevTransactions);
                 } else {
                     throw new InvalidInputException("You have entered an invalid input; please enter a valid word or check your spelling");
@@ -133,27 +118,20 @@ public class ScannerClass {
             } catch (InvalidInputException ex) {
                 System.out.println("Invalid input, try again");
             }
-        }
 
         return transactionScannerResult;
     }
 
-    public void moneyInput(String accountInput, String transactionInput, Scanner scanner) throws OverdraftWithdrawlException {
-
-        while (true) {
+    public void moneyInput(String accountInput, String transactionInput, double apiMoneyInput) throws OverdraftWithdrawlException {
             System.out.print("Enter your desired amount to " + transactionInput + ": ");
             try {
-                double moneyInput = scanner.nextDouble();
-                transactionHandler(accountInput, transactionInput, moneyInput, account);
-                prevTransactions(accountInput, transactionInput, moneyInput);
-                break;
+                transactionHandler(accountInput, transactionInput, apiMoneyInput, account);
+                prevTransactions(accountInput, transactionInput, apiMoneyInput);
             } catch (OverdraftWithdrawlException e) {
                 System.out.println("Exception occurred: " + e);
-                scanner.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println("Please enter a valid number!");
-                scanner.nextLine();
             }
         }
     }
-}
+

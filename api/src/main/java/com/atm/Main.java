@@ -6,19 +6,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @SpringBootApplication(scanBasePackages={
         "com.atm"})
+@RestController
 public class Main implements CommandLineRunner {
 
     @Autowired
-    ScannerClass scanningMethods;
+    ScannerService scanningMethods;
+
+    @Autowired
+    ApiService apiMethods;
+
+    @GetMapping(value = "/previous")
+    public ArrayList<String> previous() {
+        return scanningMethods.prevTransactions;
+    }
+
+    @RequestMapping(value = "/{id1}/{id2}/{id3}", method = RequestMethod.POST)
+    public String apiTransaction() throws MalformedURLException {
+        URL url1 = new URL("/{id1}");
+        URL url2 = new URL("/{id2}");
+        URL url3 = new URL("/{id3}");
+
+        try {
+            String accountScannerPasser = apiMethods.accountType(url1.toString());
+            String transactionScannerPasser = apiMethods.transactionType(accountScannerPasser, url2.toString());
+            // apiMethods.moneyInput(accountScannerPasser, transactionScannerPasser, url3.toString());
+        } catch (InvalidInputException ex) {
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) { // C H A N G E  T H I S  B A C K
+            System.out.println(ex);
+        }
+
+        return "Transaction Complete";
+    }
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Main.class);
