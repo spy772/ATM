@@ -1,6 +1,6 @@
 package com.atm.services;
 
-import com.atm.model.Account;
+import com.atm.model.Client;
 
 import java.text.NumberFormat;
 
@@ -11,38 +11,38 @@ public abstract class ExtendedTransactions implements Transactions {
     private double savingsInterest = 0.6 / PERCENT;
     private double checkingInterest = 0.03 / PERCENT;
 
-    public void numberOfTransactions(Account account) {
-        double afterTransaction = account.getSavingsBalance() - 500;
-        if (account.getNumOfTransactions() < 6) {
-            account.setNumOfTransactions(1);
-            System.out.println("You have made " + account.getNumOfTransactions() + " transactions out of your maximum 6 this month.");
+    public void numberOfTransactions(Client client) {
+        double afterTransaction = client.getSavingsBalance() - 500;
+        if (client.getNumOfTransactions() < 6) {
+            client.setNumOfTransactions(1);
+            System.out.println("You have made " + client.getNumOfTransactions() + " transactions out of your maximum 6 this month.");
         } else {
-            System.out.println("You have exceeded your monthly number of transactions in this account, a $500 fee will be applied");
-            account.setSavingsBalance(afterTransaction);
+            System.out.println("You have exceeded your monthly number of transactions in this client, a $500 fee will be applied");
+            client.setSavingsBalance(afterTransaction);
         }
     }
 
-    public void monthlyFunctionsSavings(Account account) {
-        account.setNumOfTransactions(0);
-        double afterInterest = account.getSavingsBalance() * (1 + savingsInterest * YEARS);
-        account.setSavingsBalance(afterInterest);
-        double afterMonthlyFee = account.getSavingsBalance() - 500;
-        account.setSavingsBalance(afterMonthlyFee);
+    public void monthlyFunctionsSavings(Client client) {
+        client.setNumOfTransactions(0);
+        double afterInterest = client.getSavingsBalance() * (1 + savingsInterest * YEARS);
+        client.setSavingsBalance(afterInterest);
+        double afterMonthlyFee = client.getSavingsBalance() - 500;
+        client.setSavingsBalance(afterMonthlyFee);
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your savings account");
-        System.out.println("Your current savings balance is: " + NumberFormat.getCurrencyInstance().format(account.getSavingsBalance()));
+        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your client via interest");
+        System.out.println("$500 of monthly maintenance fees have been deducted from your savings client");
+        System.out.println("Your current savings balance is: " + NumberFormat.getCurrencyInstance().format(client.getSavingsBalance()));
     }
 
-    public void monthlyFunctionsChecking(Account account) {
-        double afterInterest = account.getCheckingBalance() * (1 + checkingInterest * YEARS);
-        account.setCheckingBalance(afterInterest);
-        double afterMonthlyFee = account.getCheckingBalance() - 500;
-        account.setCheckingBalance(afterMonthlyFee);
+    public void monthlyFunctionsChecking(Client client) {
+        double afterInterest = client.getCheckingBalance() * (1 + checkingInterest * YEARS);
+        client.setCheckingBalance(afterInterest);
+        double afterMonthlyFee = client.getCheckingBalance() - 500;
+        client.setCheckingBalance(afterMonthlyFee);
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your checking account");
-        System.out.println("Your current checking balance is: " + NumberFormat.getCurrencyInstance().format(account.getCheckingBalance()));
+        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your client via interest");
+        System.out.println("$500 of monthly maintenance fees have been deducted from your checking client");
+        System.out.println("Your current checking balance is: " + NumberFormat.getCurrencyInstance().format(client.getCheckingBalance()));
     }
 }
 
