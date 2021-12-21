@@ -2,7 +2,7 @@ package com.atm;
 
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
-import com.atm.model.Account;
+import com.atm.model.Client;
 import com.atm.services.BankServices;
 import com.atm.services.CheckingServices;
 import com.atm.services.SavingsServices;
@@ -24,7 +24,7 @@ public class ApiService {
     @Autowired
     CheckingServices checkingServices;
 
-    Account account = new Account();
+    Client client = new Client();
 
     public ArrayList<String> prevTransactions = new ArrayList<String>();
 
@@ -54,40 +54,40 @@ public class ApiService {
         }
     }
 
-    public String checkBalance(String accountInput, Account account) {
+    public String checkBalance(String accountInput, Client client) {
         String accountBalance = "";
 
         if (accountInput.equals("bank")) {
-            accountBalance = bankServices.checkBalance(account);
+            accountBalance = bankServices.checkBalance(client);
         } else if (accountInput.equals("savings")) {
-            accountBalance = savingsServices.checkBalance(account);
+            accountBalance = savingsServices.checkBalance(client);
         } else if (accountInput.equals("checking")) {
-            accountBalance = checkingServices.checkBalance(account);
+            accountBalance = checkingServices.checkBalance(client);
         }
 
         return accountBalance;
     }
 
-    public String transactionHandler(String accountInput, String transactionInput, double moneyInput, Account account) throws OverdraftWithdrawlException {
+    public String transactionHandler(String accountInput, String transactionInput, double moneyInput, Client client) throws OverdraftWithdrawlException {
         String transactionHandlerReturn = "";
 
         if (transactionInput.equals("deposit")) {
             if (accountInput.equals("bank")) {
-                transactionHandlerReturn = bankServices.deposit(moneyInput, account);
+                transactionHandlerReturn = bankServices.deposit(moneyInput, client);
             } else if (accountInput.equals("savings")) {
-                transactionHandlerReturn = savingsServices.deposit(moneyInput, account);
+                transactionHandlerReturn = savingsServices.deposit(moneyInput, client);
             } else if (accountInput.equals("checking")) {
-                transactionHandlerReturn = checkingServices.deposit(moneyInput, account);
+                transactionHandlerReturn = checkingServices.deposit(moneyInput, client);
             }
         }
 
         if (transactionInput.equals("withdraw")) {
             if (accountInput.equals("bank")) {
-                transactionHandlerReturn = bankServices.withdraw(moneyInput, account);
+                transactionHandlerReturn = bankServices.withdraw(moneyInput, client);
             } else if (accountInput.equals("savings")) {
-                transactionHandlerReturn = savingsServices.withdraw(moneyInput, account);
+                transactionHandlerReturn = savingsServices.withdraw(moneyInput, client);
             } else if (accountInput.equals("checking")) {
-                transactionHandlerReturn = checkingServices.withdraw(moneyInput, account);
+                transactionHandlerReturn = checkingServices.withdraw(moneyInput, client);
             }
         }
 
@@ -100,8 +100,8 @@ public class ApiService {
             if (apiAccountInput.equals("bank") || apiAccountInput.equals("savings") || apiAccountInput.equals("checking")) {
                 accountTypePasser = apiAccountInput;
             } else if (apiAccountInput.equals("monthly")) {
-                savingsServices.monthlyFunctionsSavings(account);
-                checkingServices.monthlyFunctionsChecking(account);
+                savingsServices.monthlyFunctionsSavings(client);
+                checkingServices.monthlyFunctionsChecking(client);
             } else if (apiAccountInput.startsWith("previous")) {
                 System.out.println(prevTransactions);
             } else {
@@ -118,7 +118,7 @@ public class ApiService {
                 if (apiTransactionInput.equals("deposit") || apiTransactionInput.equals("withdraw")) {
                     transactionTypePasser = apiTransactionInput;
                 } else if (apiTransactionInput.equals("balance")) {
-                    transactionTypeReturn = checkBalance(accountInput, account);
+                    transactionTypeReturn = checkBalance(accountInput, client);
                 } else if (apiTransactionInput.startsWith("previous")) {
                     System.out.println(prevTransactions);
                 } else {
@@ -136,7 +136,7 @@ public class ApiService {
 
             System.out.print("Enter your desired amount to " + transactionInput + ": ");
             try {
-                moneyInputReturn = transactionHandler(accountInput, transactionInput, apiMoneyInput, account);
+                moneyInputReturn = transactionHandler(accountInput, transactionInput, apiMoneyInput, client);
                 prevTransactions(accountInput, transactionInput, apiMoneyInput);
             } catch (OverdraftWithdrawlException e) {
                 System.out.println("Exception occurred: " + e);

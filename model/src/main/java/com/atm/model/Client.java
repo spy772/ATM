@@ -1,6 +1,6 @@
 package com.atm.model;
 
-public class Account {
+public class Client {
 
     private double bankBalance;
     private double checkingBalance;

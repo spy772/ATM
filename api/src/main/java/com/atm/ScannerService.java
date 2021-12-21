@@ -2,14 +2,9 @@ package com.atm;
 
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
-import com.atm.model.Account;
-import com.atm.services.BankServices;
-import com.atm.services.CheckingServices;
-import com.atm.services.SavingsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -45,7 +40,7 @@ public class ScannerService {
         String transactionScannerResult;
 
         while (true) {
-            System.out.print("Welcome to your " + accountInput + " account, enter \"balance\", \"deposit\", \"withdraw\" or \"previous\": ");
+            System.out.print("Welcome to your " + accountInput + " client, enter \"balance\", \"deposit\", \"withdraw\" or \"previous\": ");
             String transactionScanner = scanner.next();
 
             try {
