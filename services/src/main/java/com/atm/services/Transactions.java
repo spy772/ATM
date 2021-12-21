@@ -5,11 +5,11 @@ import com.atm.model.Account;
 
 public interface Transactions {
 
-    public void checkBalance(Account account);
+    public String checkBalance(Account account);
 
-    public void deposit(double amountToDeposit, Account account);
+    public String deposit(double amountToDeposit, Account account);
 
-    public void withdraw(double amountToWithdraw, Account account) throws OverdraftWithdrawlException;
+    public String withdraw(double amountToWithdraw, Account account) throws OverdraftWithdrawlException;
 
 }
 

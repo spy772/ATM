@@ -30,20 +30,34 @@ public class Main implements CommandLineRunner {
         return apiMethods.prevTransactions;
     }
 
-    @PostMapping(value = "/{id1}/{id2}/{id3}")
-    public String apiTransaction(@PathVariable("id1") String url1, @PathVariable("id2") String url2, @PathVariable("id3") double url3) {
+    @GetMapping(value = "/balance/{id1}")
+    public String balance(@PathVariable("id1") String account) {
+        String print = "";
 
         try {
-            String accountScannerPasser = apiMethods.accountType(url1);
-            String transactionScannerPasser = apiMethods.transactionType(accountScannerPasser, url2);
-            apiMethods.moneyInput(accountScannerPasser, transactionScannerPasser, url3);
+            print = apiMethods.transactionType(account, "balance");
         } catch (InvalidInputException ex) {
-            System.out.println(ex.getMessage());
-        } catch (OverdraftWithdrawlException ex) {
-            System.out.println(ex);
+            print = ex.getMessage();
         }
 
-        return "Transaction Complete";
+        return print;
+    }
+
+    @PostMapping(value = "/{id1}/{id2}/{id3}")
+    public String apiTransaction(@PathVariable("id1") String url1, @PathVariable("id2") String url2, @PathVariable("id3") double url3) {
+        String print = "";
+
+        try {
+            apiMethods.accountType(url1);
+            apiMethods.transactionType(apiMethods.accountTypePasser, url2);
+            print = apiMethods.moneyInput(apiMethods.accountTypePasser, apiMethods.transactionTypePasser, url3);
+        } catch (InvalidInputException ex) {
+            print = "Invalid input, try again";
+        } catch (OverdraftWithdrawlException ex) {
+            print = ex.getMessage();
+        }
+
+        return print;
     }
 
     public static void main(String[] args) {

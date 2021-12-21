@@ -8,17 +8,21 @@ import java.util.Locale;
 @Service
 public class CheckingServices extends ExtendedTransactions {
 
-    public void checkBalance(Account account) {
-        System.out.println("Your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance()));
+    public String checkBalance(Account account) {
+        System.out.println("Your current checking balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance()));
+        return "Your current checking balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance());
     }
 
-    public void deposit(double amountToDeposit, Account account) {
+    public String deposit(double amountToDeposit, Account account) {
         double afterDeposit = account.getCheckingBalance() + amountToDeposit;
         account.setCheckingBalance(afterDeposit);
         System.out.println("You successfully deposited: " + amountToDeposit);
+        return "You successfully deposited: " + amountToDeposit;
     }
 
-    public void withdraw(double amountToWithdraw, Account account) throws OverdraftWithdrawlException {
+    public String withdraw(double amountToWithdraw, Account account) throws OverdraftWithdrawlException {
+        String withdrawlResult;
+
         if (account.getCheckingBalance() > 0) {
             double afterWithdrawl = account.getCheckingBalance() - amountToWithdraw;
 
@@ -27,9 +31,13 @@ public class CheckingServices extends ExtendedTransactions {
             } else {
                 account.setCheckingBalance(afterWithdrawl);
                 System.out.println("You have successfully withdrawn: " + amountToWithdraw);
+                withdrawlResult = "You have successfully withdrawn: " + amountToWithdraw;
             }
         } else {
             System.out.println("You do not have enough balance to withdraw, your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance()));
+            withdrawlResult = "You do not have enough balance to withdraw, your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(account.getCheckingBalance());
         }
+
+        return withdrawlResult;
     }
 }

@@ -19,9 +19,6 @@ public class ScannerService {
     @Autowired
     ApiService apiMethods;
 
-    @Autowired
-    Account account;
-
     public String accountType(Scanner scanner) throws InvalidInputException {
         String accountScannerPasser;
 
@@ -56,7 +53,7 @@ public class ScannerService {
                     transactionScannerResult = transactionScanner;
                     break;
                 } else if (transactionScanner.startsWith("balance")) {
-                    apiMethods.checkBalance(accountInput, account);
+                    apiMethods.transactionType(accountInput, "balance");
                 } else if (transactionScanner.startsWith("previous")) {
                     apiMethods.accountType("previous");
                 } else {
@@ -76,7 +73,7 @@ public class ScannerService {
             System.out.print("Enter your desired amount to " + transactionInput + ": ");
             try {
                 double moneyInput = scanner.nextDouble();
-                apiMethods.transactionHandler(accountInput, transactionInput, moneyInput, account);
+                apiMethods.moneyInput(accountInput, transactionInput, moneyInput);
                 apiMethods.prevTransactions(accountInput, transactionInput, moneyInput);
                 break;
             } catch (OverdraftWithdrawlException e) {
