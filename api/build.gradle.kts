@@ -16,10 +16,6 @@ dependencies {
     implementation(project(":model"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-}
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+    implementation("org.springframework:spring-test:5.2.6.RELEASE")
+    testImplementation("junit:junit:4.13.1")
 }
