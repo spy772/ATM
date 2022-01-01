@@ -24,6 +24,9 @@ public class ApiService {
     @Autowired
     CheckingServices checkingServices;
 
+    @Autowired
+    ApiDAO apiDAO;
+
     Client client = new Client();
 
     public ArrayList<String> prevTransactions = new ArrayList<String>();
@@ -58,36 +61,42 @@ public class ApiService {
         String accountBalance = "";
 
         if (accountInput.equals("bank")) {
-            accountBalance = bankServices.checkBalance(client);
+            accountBalance = "Your bank balance is: " + apiDAO.checkBankBalance();
         } else if (accountInput.equals("savings")) {
-            accountBalance = savingsServices.checkBalance(client);
+            accountBalance = "Your savings balance is: " + apiDAO.checkSavingsBalance();
         } else if (accountInput.equals("checking")) {
-            accountBalance = checkingServices.checkBalance(client);
+            accountBalance = "Your checking balance is: " + apiDAO.checkCheckingBalance();
         }
 
         return accountBalance;
     }
 
-    public String transactionHandler(String accountInput, String transactionInput, double moneyInput, Client client) throws OverdraftWithdrawlException {
-        String transactionHandlerReturn = "";
+    public double transactionHandler(String accountInput, String transactionInput, double moneyInput, Client client) throws OverdraftWithdrawlException {
+        double transactionHandlerReturn = 0;
 
         if (transactionInput.equals("deposit")) {
             if (accountInput.equals("bank")) {
                 transactionHandlerReturn = bankServices.deposit(moneyInput, client);
+                apiDAO.depositIntoBank(transactionHandlerReturn);
             } else if (accountInput.equals("savings")) {
                 transactionHandlerReturn = savingsServices.deposit(moneyInput, client);
+                apiDAO.depositIntoSavings(transactionHandlerReturn);
             } else if (accountInput.equals("checking")) {
                 transactionHandlerReturn = checkingServices.deposit(moneyInput, client);
+                apiDAO.depositIntoChecking(transactionHandlerReturn);
             }
         }
 
         if (transactionInput.equals("withdraw")) {
             if (accountInput.equals("bank")) {
-                transactionHandlerReturn = bankServices.withdraw(moneyInput, client);
+                transactionHandlerReturn = bankServices.withdraw(moneyInput, apiDAO.checkBankBalance());
+                apiDAO.withdrawFromBank(transactionHandlerReturn);
             } else if (accountInput.equals("savings")) {
-                transactionHandlerReturn = savingsServices.withdraw(moneyInput, client);
+                transactionHandlerReturn = savingsServices.withdraw(moneyInput, apiDAO.checkSavingsBalance());
+                apiDAO.withdrawFromSavings(transactionHandlerReturn);
             } else if (accountInput.equals("checking")) {
-                transactionHandlerReturn = checkingServices.withdraw(moneyInput, client);
+                transactionHandlerReturn = checkingServices.withdraw(moneyInput, apiDAO.checkCheckingBalance());
+                apiDAO.withdrawFromChecking(transactionHandlerReturn);
             }
         }
 
@@ -136,7 +145,11 @@ public class ApiService {
 
             System.out.print("Enter your desired amount to " + transactionInput + ": ");
             try {
-                moneyInputReturn = transactionHandler(accountInput, transactionInput, apiMoneyInput, client);
+                if (transactionInput.equals("deposit")) {
+                    moneyInputReturn = "You have successfully deposited " + transactionHandler(accountInput, transactionInput, apiMoneyInput, client);
+                } else if (transactionInput.equals("withdraw")) {
+                    moneyInputReturn = "You have successfully withdrawn " + transactionHandler(accountInput, transactionInput, apiMoneyInput, client);
+                }
                 prevTransactions(accountInput, transactionInput, apiMoneyInput);
             } catch (OverdraftWithdrawlException e) {
                 System.out.println("Exception occurred: " + e);

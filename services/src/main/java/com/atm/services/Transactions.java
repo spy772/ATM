@@ -7,9 +7,9 @@ public interface Transactions {
 
     public String checkBalance(Client client);
 
-    public String deposit(double amountToDeposit, Client client);
+    public double deposit(double amountToDeposit, Client client);
 
-    public String withdraw(double amountToWithdraw, Client client) throws OverdraftWithdrawlException;
+    public double withdraw(double amountToWithdraw, double balance) throws OverdraftWithdrawlException;
 
 }
 

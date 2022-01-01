@@ -13,32 +13,26 @@ public class BankServices implements Transactions {
         return "Your current bank balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(client.getBankBalance());
     }
 
-    public String deposit(double amountToDeposit, Client client) {
+    public double deposit(double amountToDeposit, Client client) {
         double afterDeposit = client.getBankBalance() + amountToDeposit;
         client.setBankBalance(afterDeposit);
         System.out.println("You successfully deposited: " + amountToDeposit);
-        return "You successfully deposited: " + amountToDeposit;
+        return amountToDeposit;
     }
 
-    public String withdraw(double amountToWithdraw, Client client) throws OverdraftWithdrawlException {
-        String withdrawlResult;
+    public double withdraw(double amountToWithdraw, double balance) throws OverdraftWithdrawlException {
 
-        if (client.getBankBalance() > 0) {
-            double afterWithdrawl = client.getBankBalance() - amountToWithdraw;
+        if (balance >= 0) {
+            double afterWithdrawl = balance - amountToWithdraw;
 
             if (afterWithdrawl < 0) {
-                throw new OverdraftWithdrawlException("Withdrawing more than available balance, you current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(client.getBankBalance()));
+                throw new OverdraftWithdrawlException("Withdrawing more than available balance, you current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(balance));
             } else {
-                client.setBankBalance(afterWithdrawl);
                 System.out.println("You have successfully withdrawn: " + amountToWithdraw);
-                withdrawlResult = "You have successfully withdrawn: " + amountToWithdraw;
             }
-        } else {
-            System.out.println("You do not have enough balance to withdraw, your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(client.getBankBalance()));
-            withdrawlResult = "You do not have enough balance to withdraw, your current balance is: " + NumberFormat.getCurrencyInstance(Locale.CANADA).format(client.getBankBalance());
         }
 
-        return withdrawlResult;
+        return amountToWithdraw;
     }
 }
 

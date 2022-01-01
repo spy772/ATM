@@ -2,10 +2,20 @@ package com.atm.model;
 
 public class Client {
 
+    private int clientId;
+    private int accountId;
     private double bankBalance;
+    private double savingsBalance;
     private double checkingBalance;
     private int numOfTransactions;
-    private double savingsBalance;
+
+    public int getClientId() { return clientId; }
+
+    public void setClientId(int clientId) { this.clientId = clientId; }
+
+    public int getAccountId() { return accountId; }
+
+    public void setAccountId(int accountId) { this.accountId = accountId; }
 
     public double getBankBalance() {
         return bankBalance;
@@ -13,6 +23,14 @@ public class Client {
 
     public void setBankBalance(double bankBalance) {
         this.bankBalance = bankBalance;
+    }
+
+    public double getSavingsBalance() {
+        return savingsBalance;
+    }
+
+    public void setSavingsBalance(double savingsBalance) {
+        this.savingsBalance = savingsBalance;
     }
 
     public double getCheckingBalance() {
@@ -31,11 +49,4 @@ public class Client {
         this.numOfTransactions = numOfTransactions;
     }
 
-    public double getSavingsBalance() {
-        return savingsBalance;
-    }
-
-    public void setSavingsBalance(double savingsBalance) {
-        this.savingsBalance = savingsBalance;
-    }
 }
