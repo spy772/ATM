@@ -1,4 +1,5 @@
 package com.atm;
+import Utilities.TransactionUtilities;
 import com.atm.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,9 +35,7 @@ public class ApiDAO { // TODO: Add Deposit() and Withdraw() methods for each acc
         double newSavingsBalance = savingsBalance + amountToDeposit;
         Client client = apiMapper.getClientById(1);
         client.setSavingsBalance(newSavingsBalance);
-        int numOfTransactions = client.getNumOfTransactions();
-        numOfTransactions += 1;
-        client.setNumOfTransactions(numOfTransactions);
+        TransactionUtilities.numberOfTransactions(client);
         apiMapper.updateClient(client);
     }
 
