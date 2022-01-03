@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.services;
 
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;

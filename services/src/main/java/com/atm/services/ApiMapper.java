@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.services;
 
 import com.atm.model.Client;
 import org.apache.ibatis.annotations.Mapper;

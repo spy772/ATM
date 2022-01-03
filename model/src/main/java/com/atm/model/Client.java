@@ -1,5 +1,7 @@
 package com.atm.model;
 
+import java.util.List;
+
 public class Client {
 
     private int clientId;
@@ -8,14 +10,23 @@ public class Client {
     private double savingsBalance;
     private double checkingBalance;
     private int numOfTransactions;
+    private List<Accounts> accountsList;
 
-    public int getClientId() { return clientId; }
+    public int getClientId() {
+        return clientId;
+    }
 
-    public void setClientId(int clientId) { this.clientId = clientId; }
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 
-    public int getAccountId() { return accountId; }
+    public int getAccountId() {
+        return accountId;
+    }
 
-    public void setAccountId(int accountId) { this.accountId = accountId; }
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
 
     public double getBankBalance() {
         return bankBalance;
@@ -47,6 +58,14 @@ public class Client {
 
     public void setNumOfTransactions(int numOfTransactions) {
         this.numOfTransactions = numOfTransactions;
+    }
+
+    public List<Accounts> getAccountsList() {
+        return accountsList;
+    }
+
+    public void setAccountsList(List<Accounts> accountsList) {
+        this.accountsList = accountsList;
     }
 
 }
