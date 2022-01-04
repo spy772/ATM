@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
-public interface ApiMapper { // TODO: Fix the @Update method so that it properly updates the ENTIRE table with the correct values
+public interface ApiMapper { // TODO: Implement the changes in the data model once ready (add values to the account table primarily, client secondarily)
 
     @Select("SELECT * " +
             "FROM client " +

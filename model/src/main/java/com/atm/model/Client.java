@@ -6,11 +6,11 @@ public class Client {
 
     private int clientId;
     private int accountId;
-    private double bankBalance;
-    private double savingsBalance;
-    private double checkingBalance;
-    private int numOfTransactions;
-    private List<Accounts> accountsList;
+    private double bankBalance; // TODO: Remove bankBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private double savingsBalance; // TODO: Remove savingsBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private double checkingBalance; // TODO: Remove checkingBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private int numOfTransactions; // TODO: Remove numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
+    private List<Accounts> account;
 
     public int getClientId() {
         return clientId;
@@ -19,6 +19,7 @@ public class Client {
     public void setClientId(int clientId) {
         this.clientId = clientId;
     }
+
 
     public int getAccountId() {
         return accountId;
@@ -60,12 +61,11 @@ public class Client {
         this.numOfTransactions = numOfTransactions;
     }
 
-    public List<Accounts> getAccountsList() {
-        return accountsList;
+    public List<Accounts> getAccount() {
+        return account;
     }
 
-    public void setAccountsList(List<Accounts> accountsList) {
-        this.accountsList = accountsList;
+    public void setAccount(List<Accounts> account) {
+        this.account = account;
     }
-
 }
