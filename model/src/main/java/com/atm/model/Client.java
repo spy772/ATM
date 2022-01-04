@@ -10,7 +10,7 @@ public class Client {
     private double savingsBalance; // TODO: Remove savingsBalance from here once the new data model is fully and safely implemented (a few days' time)
     private double checkingBalance; // TODO: Remove checkingBalance from here once the new data model is fully and safely implemented (a few days' time)
     private int numOfTransactions; // TODO: Remove numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
-    private List<Accounts> account;
+    private List<Account> account;
 
     public int getClientId() {
         return clientId;
@@ -61,11 +61,11 @@ public class Client {
         this.numOfTransactions = numOfTransactions;
     }
 
-    public List<Accounts> getAccount() {
+    public List<Account> getAccount() {
         return account;
     }
 
-    public void setAccount(List<Accounts> account) {
+    public void setAccount(List<Account> account) {
         this.account = account;
     }
 }

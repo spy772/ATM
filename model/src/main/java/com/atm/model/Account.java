@@ -1,10 +1,10 @@
 package com.atm.model;
 
-public class Accounts {
+public class Account {
 
     private int accountId;
     private double balance;
-    private String accountType;
+    private AccountTypes accountType; // TODO: Enum
     private int numOfTransactions; // TODO: Implement numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
 
     public int getAccountId() {
@@ -23,11 +23,11 @@ public class Accounts {
         this.balance = balance;
     }
 
-    public String getAccountType() {
+    public AccountTypes getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(AccountTypes accountType) {
         this.accountType = accountType;
     }
 
