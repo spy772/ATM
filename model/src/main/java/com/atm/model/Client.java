@@ -1,21 +1,33 @@
 package com.atm.model;
 
+import java.util.List;
+
 public class Client {
 
     private int clientId;
     private int accountId;
-    private double bankBalance;
-    private double savingsBalance;
-    private double checkingBalance;
-    private int numOfTransactions;
+    private double bankBalance; // TODO: Remove bankBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private double savingsBalance; // TODO: Remove savingsBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private double checkingBalance; // TODO: Remove checkingBalance from here once the new data model is fully and safely implemented (a few days' time)
+    private int numOfTransactions; // TODO: Remove numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
+    private List<Account> account;
 
-    public int getClientId() { return clientId; }
+    public int getClientId() {
+        return clientId;
+    }
 
-    public void setClientId(int clientId) { this.clientId = clientId; }
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 
-    public int getAccountId() { return accountId; }
 
-    public void setAccountId(int accountId) { this.accountId = accountId; }
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
 
     public double getBankBalance() {
         return bankBalance;
@@ -49,4 +61,11 @@ public class Client {
         this.numOfTransactions = numOfTransactions;
     }
 
+    public List<Account> getAccount() {
+        return account;
+    }
+
+    public void setAccount(List<Account> account) {
+        this.account = account;
+    }
 }
