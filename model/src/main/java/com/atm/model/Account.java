@@ -2,10 +2,19 @@ package com.atm.model;
 
 public class Account {
 
+    private int clientId;
     private int accountId;
     private double balance;
-    private AccountTypes accountType; // TODO: Enum
+    private AccountTypes accountType;
     private int numOfTransactions; // TODO: Implement numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 
     public int getAccountId() {
         return accountId;

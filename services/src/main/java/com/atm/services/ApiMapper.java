@@ -1,6 +1,6 @@
 package com.atm.services;
 
-import com.atm.model.Client;
+import com.atm.model.Account;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -12,11 +12,15 @@ public interface ApiMapper { // TODO: Implement the changes in the data model on
     @Select("SELECT * " +
             "FROM client " +
             "WHERE clientid = #{clientId}")
-    Client getClientById(@Param("clientId") int clientId);
+    Account getClientById();
 
-    @Update("UPDATE client " +
-            "SET bankbalance=#{bankBalance}, checkingbalance=#{checkingBalance}, savingsbalance=#{savingsBalance}, numoftransactions=#{numOfTransactions}" +
-            "WHERE clientid = #{clientId}")
-    int updateClient(Client client);
+    @Select("SELECT * " +
+            "FROM accounts " +
+            "WHERE accountid = #{accountId}")
+    Account getAccountById(@Param("accountId") int accountId);
 
+    @Update("UPDATE accounts " +
+            "SET balance=#{balance}, numoftransactions=#{numOfTransactions}" +
+            "WHERE accountid = #{accountId}")
+    int updateClient(Account account);
 }

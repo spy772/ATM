@@ -30,11 +30,11 @@ public class Main implements CommandLineRunner {
     }
 
     @GetMapping(value = "/balance/{id1}")
-    public String balance(@PathVariable("id1") String account) {
+    public String balance(@PathVariable("id1") int accountId) {
         String print = "";
 
         try {
-            print = apiMethods.transactionType(account, "balance");
+            print = apiMethods.transactionType(accountId, "balance");
         } catch (InvalidInputException ex) {
             print = ex.getMessage();
         }
@@ -43,7 +43,7 @@ public class Main implements CommandLineRunner {
     }
 
     @PostMapping(value = "/{id1}/{id2}/{id3}")
-    public String apiTransaction(@PathVariable("id1") String url1, @PathVariable("id2") String url2, @PathVariable("id3") double url3) {
+    public String apiTransaction(@PathVariable("id1") int url1, @PathVariable("id2") String url2, @PathVariable("id3") double url3) {
         String print = "";
 
         try {
@@ -56,6 +56,14 @@ public class Main implements CommandLineRunner {
             print = ex.getMessage();
         }
 
+        return print;
+    }
+
+    @PostMapping(value = "/{id1}")
+    public String specialRequests(@PathVariable("id1") String specialRequest) {
+        String print = "";
+
+        apiMethods.specialRequests(specialRequest);
         return print;
     }
 
@@ -72,7 +80,7 @@ public class Main implements CommandLineRunner {
 
         while (true) {
             try {
-                String accountScannerPasser = scanningMethods.accountType(scanner);
+                int accountScannerPasser = scanningMethods.accountType(scanner);
                 String transactionScannerPasser = scanningMethods.transactionType(accountScannerPasser, scanner);
                 scanningMethods.moneyInput(accountScannerPasser, transactionScannerPasser, scanner);
             } catch (InvalidInputException ex) {
