@@ -2,11 +2,22 @@ package com.atm.model;
 
 public class Account {
 
+    public Account(int clientId, double balance, AccountTypes accountType, int numOfTransactions) {
+        this.clientId = clientId;
+        this.balance = balance;
+        this.accountType = accountType;
+        this.numOfTransactions = numOfTransactions;
+    }
+
+    public Account() {
+
+    }
+
     private int clientId;
     private int accountId;
     private double balance;
     private AccountTypes accountType;
-    private int numOfTransactions; // TODO: Implement numOfTransactions from here once the new data model is fully and safely implemented (a few days' time)
+    private int numOfTransactions;
 
     public int getClientId() {
         return clientId;

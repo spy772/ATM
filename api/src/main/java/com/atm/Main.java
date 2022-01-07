@@ -59,6 +59,16 @@ public class Main implements CommandLineRunner {
         return print;
     }
 
+    @PostMapping(value = "create-account/{id1}/{id2}")
+    public String accountCreation(@PathVariable("id1") int url1, @PathVariable("id2") String url2) {
+        return apiMethods.createNewAccount(url1, url2);
+    }
+
+    @PostMapping(value = "create-client")
+    public String clientCreation() {
+        return apiMethods.createNewClient();
+    }
+
     @PostMapping(value = "/{id1}")
     public String specialRequests(@PathVariable("id1") String specialRequest) {
         String print = "";

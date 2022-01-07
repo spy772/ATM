@@ -5,6 +5,7 @@ import java.util.List;
 public class Client {
 
     private int clientId;
+    private String firstName;
     private List<Account> account;
 
     public int getClientId() {
@@ -13,6 +14,14 @@ public class Client {
 
     public void setClientId(int clientId) {
         this.clientId = clientId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public List<Account> getAccount() {

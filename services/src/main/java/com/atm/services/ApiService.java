@@ -3,6 +3,7 @@ package com.atm.services;
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
 import Utilities.TransactionUtilities;
+import com.atm.model.AccountTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class ApiService {
 
     public int accountTypePasser;
 
-    public String transactionTypePasser = "";
+    public String transactionTypePasser;
 
     public void prevTransactions(int accountType, String actionType, double moneyAmount) {
         if (actionType.equals("deposit")) {
@@ -35,7 +36,7 @@ public class ApiService {
         return accountBalance;
     }
 
-    public ArrayList specialRequests(String requestInput) { // TODO: Change the "getClientById" method to a method that does this on all accounts
+    public ArrayList specialRequests(String requestInput) {
         ArrayList previousTransactions = new ArrayList<String>();
         previousTransactions.add("Successful monthly transactions");
 
@@ -48,6 +49,27 @@ public class ApiService {
         }
 
         return previousTransactions;
+    }
+
+    public String createNewAccount(int clientId, String accountType) {
+        String creationReturn = "";
+
+        if (accountType.equals("bank") || accountType.equals("BANK")) {
+            creationReturn   = apiDAO.createNewAccount(clientId, AccountTypes.BANK);
+        } else if (accountType.equals("savings") || accountType.equals("SAVINGS")) {
+            creationReturn = apiDAO.createNewAccount(clientId, AccountTypes.SAVINGS);
+        } else if (accountType.equals("checking") || accountType.equals("CHECKING")) {
+            creationReturn = apiDAO.createNewAccount(clientId, AccountTypes.CHECKING);
+        } else {
+            System.out.println("You have entered an invalid account type - please check your spelling");
+            creationReturn = "You have entered an invalid account type - please check your spelling";
+        }
+
+        return creationReturn;
+    }
+
+    public String createNewClient() {
+        return apiDAO.createNewClient();
     }
 
     public double transactionHandler(int accountInput, String transactionInput, double moneyInput) throws OverdraftWithdrawlException {
@@ -65,8 +87,8 @@ public class ApiService {
     }
 
     public int accountType(int apiAccountInput) {
-            int accountScannerPasser = apiAccountInput;
-            return accountScannerPasser;
+            accountTypePasser = apiAccountInput;
+            return accountTypePasser;
     }
 
     public String transactionType(int accountInput, String apiTransactionInput) throws InvalidInputException {

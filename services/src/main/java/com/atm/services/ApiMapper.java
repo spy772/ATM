@@ -1,13 +1,11 @@
 package com.atm.services;
 
 import com.atm.model.Account;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.atm.model.Client;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
-public interface ApiMapper { // TODO: Implement the changes in the data model once ready (add values to the account table primarily, client secondarily)
+public interface ApiMapper {
 
     @Select("SELECT * " +
             "FROM client " +
@@ -23,4 +21,14 @@ public interface ApiMapper { // TODO: Implement the changes in the data model on
             "SET balance=#{balance}, numoftransactions=#{numOfTransactions}" +
             "WHERE accountid = #{accountId}")
     int updateClient(Account account);
+
+    @Insert("INSERT INTO accounts (clientid, balance, accounttype, numoftransactions)" +
+            "VALUES (#{clientId}, 0, #{accountType}, 0)")
+    @Options(useGeneratedKeys = true, keyProperty="accountId")
+    int createNewAccount(Account account);
+
+    @Insert("INSERT INTO clients (firstname) " +
+            "VALUES (#{firstName})")
+    @Options(useGeneratedKeys = true, keyProperty="clientId")
+    int createNewClient(Client client);
 }
