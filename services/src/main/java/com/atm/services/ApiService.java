@@ -3,11 +3,13 @@ package com.atm.services;
 import Exceptions.InvalidInputException;
 import Exceptions.OverdraftWithdrawlException;
 import Utilities.TransactionUtilities;
+import com.atm.model.AccountTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 @Service
 public class ApiService {
@@ -17,96 +19,90 @@ public class ApiService {
 
     public ArrayList<String> prevTransactions = new ArrayList<String>();
 
-    public String accountTypePasser = "";
+    public int accountTypePasser;
 
-    public String transactionTypePasser = "";
+    public String transactionTypePasser;
 
-    public void prevTransactions(String accountType, String actionType, double moneyAmount) {
-        if (accountType.equals("bank")) {
-            if (actionType.equals("deposit")) {
-                prevTransactions.add(0, "Bank: Deposited " + moneyAmount);
-            } else if (actionType.equals("withdraw")) {
-                prevTransactions.add(0, "Bank: Withdraw " + moneyAmount);
-            }
-        } else if (accountType.equals("savings")) {
-            if (actionType.equals("deposit")) {
-                prevTransactions.add(0, "Savings: Deposited " + moneyAmount);
-            } else if (actionType.equals("withdraw")) {
-                prevTransactions.add(0, "Savings: Withdraw " + moneyAmount);
-            }
-        } else if (accountType.equals("checking")) {
-            if (actionType.equals("deposit")) {
-                prevTransactions.add(0, "Checking: Deposited " + moneyAmount);
-            } else if (actionType.equals("withdraw")) {
-                prevTransactions.add(0, "Checking: Withdraw " + moneyAmount);
-            }
+    public void prevTransactions(int accountType, String actionType, double moneyAmount) {
+        if (actionType.equals("deposit")) {
+            prevTransactions.add(0, "Deposited " + moneyAmount + "in account" + accountType);
+        } else if (actionType.equals("withdraw")) {
+            prevTransactions.add(0, "Withdrew " + moneyAmount + "from account" + accountType);
         }
     }
 
-    public String checkBalance(String accountInput) {
+    public String checkBalance(int accountInput) {
         String accountBalance = "";
-
-        if (accountInput.equals("bank")) {
-            accountBalance = "Your bank balance is: " + apiDAO.checkBankBalance();
-        } else if (accountInput.equals("savings")) {
-            accountBalance = "Your savings balance is: " + apiDAO.checkSavingsBalance();
-        } else if (accountInput.equals("checking")) {
-            accountBalance = "Your checking balance is: " + apiDAO.checkCheckingBalance();
-        }
-
+        accountBalance = "Your account balance is: " + apiDAO.checkAccountBalance(accountInput);
         return accountBalance;
     }
 
-    public double transactionHandler(String accountInput, String transactionInput, double moneyInput) throws OverdraftWithdrawlException {
+    public ArrayList specialRequests(String requestInput) {
+        ArrayList previousTransactions = new ArrayList<String>();
+        previousTransactions.add("Successful monthly transactions");
+
+        if (requestInput.equals("monthly")) {
+            TransactionUtilities.monthlyFunctionsSavings(apiDAO.apiMapper.getAllSavingsAccounts());
+            TransactionUtilities.monthlyFunctionsChecking(apiDAO.apiMapper.getAllCheckingAccounts());
+        } else if (requestInput.equals("previous")) {
+            System.out.println(prevTransactions);
+            previousTransactions = prevTransactions;
+        }
+
+        return previousTransactions;
+    }
+
+    public List<String> returnAccountsInClient(int clientId) {
+        List<String> accountsInClient = apiDAO.listAllAccountsInClient(clientId);
+
+        for (int i = 0; i < accountsInClient.size(); i++) {
+            System.out.println(accountsInClient.get(i));
+        }
+
+        return apiDAO.listAllAccountsInClient(clientId);
+    }
+
+    public String createNewAccount(int clientId, String accountType) {
+        String creationReturn = "";
+
+        if (accountType.equals("bank") || accountType.equals("BANK")) {
+            creationReturn   = apiDAO.createNewAccount(clientId, AccountTypes.BANK);
+        } else if (accountType.equals("savings") || accountType.equals("SAVINGS")) {
+            creationReturn = apiDAO.createNewAccount(clientId, AccountTypes.SAVINGS);
+        } else if (accountType.equals("checking") || accountType.equals("CHECKING")) {
+            creationReturn = apiDAO.createNewAccount(clientId, AccountTypes.CHECKING);
+        } else {
+            System.out.println("You have entered an invalid account type - please check your spelling");
+            creationReturn = "You have entered an invalid account type - please check your spelling";
+        }
+
+        return creationReturn;
+    }
+
+    public String createNewClient() {
+        return apiDAO.createNewClient();
+    }
+
+    public double transactionHandler(int accountInput, String transactionInput, double moneyInput) throws OverdraftWithdrawlException {
         double transactionHandlerReturn = 0;
 
         if (transactionInput.equals("deposit")) {
-            if (accountInput.equals("bank")) {
-                transactionHandlerReturn = moneyInput;
-                apiDAO.depositIntoBank(moneyInput);
-            } else if (accountInput.equals("savings")) {
-                transactionHandlerReturn = moneyInput;
-                apiDAO.depositIntoSavings(moneyInput);
-            } else if (accountInput.equals("checking")) {
-                transactionHandlerReturn = moneyInput;
-                apiDAO.depositIntoChecking(moneyInput);
-            }
-        }
-
-        if (transactionInput.equals("withdraw")) {
-            if (accountInput.equals("bank")) {
-                transactionHandlerReturn = TransactionUtilities.legalWithdrawChecker(moneyInput, apiDAO.checkBankBalance());
-                apiDAO.withdrawFromBank(transactionHandlerReturn);
-            } else if (accountInput.equals("savings")) {
-                transactionHandlerReturn = TransactionUtilities.legalWithdrawChecker(moneyInput, apiDAO.checkSavingsBalance());
-                apiDAO.withdrawFromSavings(transactionHandlerReturn);
-            } else if (accountInput.equals("checking")) {
-                transactionHandlerReturn = TransactionUtilities.legalWithdrawChecker(moneyInput, apiDAO.checkCheckingBalance());
-                apiDAO.withdrawFromChecking(transactionHandlerReturn);
-            }
+            transactionHandlerReturn = moneyInput;
+            apiDAO.deposit(accountInput, moneyInput);
+        } else if (transactionInput.equals("withdraw")) {
+            transactionHandlerReturn = TransactionUtilities.legalWithdrawChecker(moneyInput, apiDAO.checkAccountBalance(accountInput));
+            apiDAO.withdraw(accountInput, transactionHandlerReturn);
         }
 
         return transactionHandlerReturn;
     }
 
-    public String accountType(String apiAccountInput) throws InvalidInputException {
-        String accountScannerPasser = "";
-
-            if (apiAccountInput.equals("bank") || apiAccountInput.equals("savings") || apiAccountInput.equals("checking")) {
-                accountTypePasser = apiAccountInput;
-            } else if (apiAccountInput.equals("monthly")) {
-                TransactionUtilities.monthlyFunctionsSavings(apiDAO.apiMapper.getClientById(1));
-                TransactionUtilities.monthlyFunctionsChecking(apiDAO.apiMapper.getClientById(1));
-            } else if (apiAccountInput.startsWith("previous")) {
-                System.out.println(prevTransactions);
-            } else {
-                throw new InvalidInputException("You have entered an invalid input; please enter a valid word or check your spelling");
-            }
-
-        return accountScannerPasser;
+    public int accountType(int apiAccountInput) {
+            accountTypePasser = apiAccountInput;
+            return accountTypePasser;
     }
 
-    public String transactionType(String accountInput, String apiTransactionInput) throws InvalidInputException {
+    public String transactionType(int accountInput, String apiTransactionInput) throws InvalidInputException {
         String transactionTypeReturn = "";
         
             try {
@@ -126,7 +122,7 @@ public class ApiService {
         return transactionTypeReturn;
     }
 
-    public String moneyInput(String accountInput, String transactionInput, double apiMoneyInput) throws OverdraftWithdrawlException {
+    public String moneyInput(int accountInput, String transactionInput, double apiMoneyInput) throws OverdraftWithdrawlException {
         String moneyInputReturn = "";
 
             System.out.print("Enter your desired amount to " + transactionInput + ": ");
@@ -146,4 +142,3 @@ public class ApiService {
             return moneyInputReturn;
         }
     }
-

@@ -1,73 +1,67 @@
 package com.atm.services;
 import Utilities.TransactionUtilities;
+import com.atm.model.Account;
+import com.atm.model.AccountTypes;
 import com.atm.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
-public class ApiDAO { // TODO: Add Deposit() and Withdraw() methods for each account type, incrementally
+public class ApiDAO { // TODO: Change all the "Client" objects to "Account" objects
 
     @Autowired
     ApiMapper apiMapper;
 
-    public double checkBankBalance() {
-        return apiMapper.getClientById(1).getBankBalance();
+    public double checkAccountBalance(int accountId) {
+        return apiMapper.getAccountById(accountId).getBalance();
     }
 
-    public double checkSavingsBalance() {
-        return apiMapper.getClientById(1).getSavingsBalance();
+    public void deposit(int accountId, double amountToDeposit) {
+        double balance = checkAccountBalance(accountId);
+        double newBalance = balance + amountToDeposit;
+        Account account = apiMapper.getAccountById(accountId);
+        account.setBalance(newBalance);
+
+        if (account.getAccountType() == AccountTypes.SAVINGS) {
+            TransactionUtilities.numberOfTransactions(account);
+        }
+
+        apiMapper.updateClient(account);
     }
 
-    public double checkCheckingBalance() {
-        return apiMapper.getClientById(1).getCheckingBalance();
+    public void withdraw(int accountId, double amountToWithdraw) {
+        double balance = checkAccountBalance(accountId);
+        double newBalance = balance - amountToWithdraw;
+        Account account = apiMapper.getAccountById(accountId);
+        account.setBalance(newBalance);
+        apiMapper.updateClient(account);
     }
 
-    public void depositIntoBank(double amountToDeposit) {
-        double bankBalance = checkBankBalance();
-        double newBankBalance = bankBalance + amountToDeposit;
-        Client client = apiMapper.getClientById(1);
-        client.setBankBalance(newBankBalance);
-        apiMapper.updateClient(client);
+    public String createNewAccount(int clientId, AccountTypes accountType) {
+        Account newAccount = new Account(clientId, 0, accountType, 0);
+        apiMapper.createNewAccount(newAccount);
+        System.out.println("You have successfully created a " + accountType + "account with the id " + newAccount.getAccountId() + "under client id " + clientId);
+        return "You have successfully created a " + accountType + "account with the id " + newAccount.getAccountId() + "under client id " + clientId;
     }
 
-    public void depositIntoSavings(double amountToDeposit) {
-        double savingsBalance = checkSavingsBalance();
-        double newSavingsBalance = savingsBalance + amountToDeposit;
-        Client client = apiMapper.getClientById(1);
-        client.setSavingsBalance(newSavingsBalance);
-        TransactionUtilities.numberOfTransactions(client);
-        apiMapper.updateClient(client);
+    public String createNewClient() {
+        Client client = new Client();
+        apiMapper.createNewClient(client);
+        return "You have successfully created a client with the id of " + client.getClientId();
     }
 
-    public void depositIntoChecking(double amountToDeposit) {
-        double checkingBalance = checkCheckingBalance();
-        double newCheckingBalance = checkingBalance + amountToDeposit;
-        Client client = apiMapper.getClientById(1);
-        client.setCheckingBalance(newCheckingBalance);
-        apiMapper.updateClient(client);
-    }
+   public List<String> listAllAccountsInClient(int clientId) {
+        List<Account> accountList = apiMapper.getClientById(clientId);
+        List<String> printAccountList = new ArrayList<>();
 
-    public void withdrawFromBank(double amountToWithdraw) {
-        double bankBalance = checkBankBalance();
-        double newBankBalance = bankBalance - amountToWithdraw;
-        Client client = apiMapper.getClientById(1);
-        client.setBankBalance(newBankBalance);
-        apiMapper.updateClient(client);
-    }
+        for (int i = 0; i < accountList.size(); i++) {
+            printAccountList.add("Account ID: " + accountList.get(i).getAccountId() + ", Balance: " + accountList.get(i).getBalance() +
+                    ", Account Type: " + accountList.get(i).getAccountType().toString() + ", Number Of Transactions: " + accountList.get(i).getNumOfTransactions());
+        }
 
-    public void withdrawFromSavings(double amountToWithdraw) {
-        double savingsBalance = checkSavingsBalance();
-        double newSavingsBalance = savingsBalance - amountToWithdraw;
-        Client client = apiMapper.getClientById(1);
-        client.setSavingsBalance(newSavingsBalance);
-        apiMapper.updateClient(client);
-    }
-
-    public void withdrawFromChecking(double amountToWithdraw) {
-        double checkingBalance = checkCheckingBalance();
-        double newCheckingBalance = checkingBalance - amountToWithdraw;
-        Client client = apiMapper.getClientById(1);
-        client.setCheckingBalance(newCheckingBalance);
-        apiMapper.updateClient(client);
+        return printAccountList;
     }
 }
