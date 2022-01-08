@@ -4,13 +4,25 @@ import com.atm.model.Account;
 import com.atm.model.Client;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface ApiMapper {
 
     @Select("SELECT * " +
-            "FROM client " +
+            "FROM accounts " +
             "WHERE clientid = #{clientId}")
-    Account getClientById();
+    List<Account> getClientById(@Param("clientId") int clientId);
+
+    @Select("SELECT * " +
+            "FROM accounts " +
+            "WHERE accounttype = 'SAVINGS'")
+    List<Account> getAllSavingsAccounts();
+
+    @Select("SELECT * " +
+            "FROM accounts " +
+            "WHERE accounttype = 'CHECKING'")
+    List<Account> getAllCheckingAccounts();
 
     @Select("SELECT * " +
             "FROM accounts " +

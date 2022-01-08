@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @SpringBootApplication(scanBasePackages={
@@ -40,6 +41,11 @@ public class Main implements CommandLineRunner {
         }
 
         return print;
+    }
+
+    @GetMapping(value = "/all-accounts/{id1}")
+    public List<String> printAllAccounts(@PathVariable("id1") int clientId) {
+        return apiMethods.returnAccountsInClient(clientId);
     }
 
     @PostMapping(value = "/{id1}/{id2}/{id3}")

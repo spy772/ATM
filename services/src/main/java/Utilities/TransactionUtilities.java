@@ -4,6 +4,7 @@ import Exceptions.OverdraftWithdrawlException;
 import com.atm.model.Account;
 import com.atm.model.Client;
 
+import java.security.AccessControlContext;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -27,27 +28,34 @@ public class TransactionUtilities {
         }
     }
 
-    public static void monthlyFunctionsSavings(Account account) {
-        account.setNumOfTransactions(0);
-        double afterInterest = account.getBalance() * (1 + savingsInterest * YEARS);
-        account.setBalance(afterInterest);
-        double afterMonthlyFee = account.getBalance() - 500;
-        account.setBalance(afterMonthlyFee);
+    public static void monthlyFunctionsSavings(List<Account> account) {
+        int accountsAffected = 0;
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your savings account");
-        System.out.println("Your current savings balance is: " + NumberFormat.getCurrencyInstance().format(account.getBalance()));
+        for (int i = 0; i < account.size(); i++) {
+            account.get(i).getNumOfTransactions();
+            double afterInterest = account.get(i).getBalance() * (1 + savingsInterest * YEARS);
+            account.get(i).setBalance(afterInterest);
+            double afterMonthlyFee = account.get(i).getBalance() - 500;
+            account.get(i).setBalance(afterMonthlyFee);
+            accountsAffected += 1;
+        }
+
+        System.out.println("$500 of monthly maintenance fees have been deducted from " + accountsAffected + " savings accounts");
     }
 
-    public static void monthlyFunctionsChecking(Account account) {
-        double afterInterest = account.getBalance() * (1 + checkingInterest * YEARS);
-        account.setBalance(afterInterest);
-        double afterMonthlyFee = account.getBalance() - 500;
-        account.setBalance(afterMonthlyFee);
+    public static void monthlyFunctionsChecking(List<Account> account) {
+        int accountsAffected = 0;
 
-        System.out.println("You have added " + NumberFormat.getCurrencyInstance().format(afterInterest) + " to your account via interest");
-        System.out.println("$500 of monthly maintenance fees have been deducted from your checking account");
-        System.out.println("Your current checking balance is: " + NumberFormat.getCurrencyInstance().format(account.getBalance()));
+        for (int i = 0; i < account.size(); i++) {
+            account.get(i).getNumOfTransactions();
+            double afterInterest = account.get(i).getBalance() * (1 + savingsInterest * YEARS);
+            account.get(i).setBalance(afterInterest);
+            double afterMonthlyFee = account.get(i).getBalance() - 500;
+            account.get(i).setBalance(afterMonthlyFee);
+            accountsAffected += 1;
+        }
+
+        System.out.println("$500 of monthly maintenance fees have been deducted from " + accountsAffected + " checking accounts");
     }
 
     public static double legalWithdrawChecker(double amountToWithdraw, double accountBalance) throws OverdraftWithdrawlException {

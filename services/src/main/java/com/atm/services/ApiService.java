@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 @Service
 public class ApiService {
@@ -41,14 +42,24 @@ public class ApiService {
         previousTransactions.add("Successful monthly transactions");
 
         if (requestInput.equals("monthly")) {
-            TransactionUtilities.monthlyFunctionsSavings(apiDAO.apiMapper.getClientById());
-            TransactionUtilities.monthlyFunctionsChecking(apiDAO.apiMapper.getClientById());
+            TransactionUtilities.monthlyFunctionsSavings(apiDAO.apiMapper.getAllSavingsAccounts());
+            TransactionUtilities.monthlyFunctionsChecking(apiDAO.apiMapper.getAllCheckingAccounts());
         } else if (requestInput.equals("previous")) {
             System.out.println(prevTransactions);
             previousTransactions = prevTransactions;
         }
 
         return previousTransactions;
+    }
+
+    public List<String> returnAccountsInClient(int clientId) {
+        List<String> accountsInClient = apiDAO.listAllAccountsInClient(clientId);
+
+        for (int i = 0; i < accountsInClient.size(); i++) {
+            System.out.println(accountsInClient.get(i));
+        }
+
+        return apiDAO.listAllAccountsInClient(clientId);
     }
 
     public String createNewAccount(int clientId, String accountType) {

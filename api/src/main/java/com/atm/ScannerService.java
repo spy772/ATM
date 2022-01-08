@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 @Service
@@ -19,7 +20,7 @@ public class ScannerService {
         int accountScannerPasser;
 
         while (true) {
-            System.out.print("Welcome to the ATM machine, enter \"bank\", \"savings\", \"checking\", \"monthly\" or \"previous\": ");
+            System.out.print("Welcome to the ATM machine, enter your Account/Client ID, \"monthly\" or \"previous\": ");
             String accountScanner = scanner.next();
 
                 if (accountScanner.startsWith("monthly")) {
@@ -41,7 +42,7 @@ public class ScannerService {
         String transactionScannerResult;
 
         while (true) {
-            System.out.print("Welcome to your " + accountInput + " client, enter \"balance\", \"deposit\", \"withdraw\" or \"previous\": ");
+            System.out.print("Welcome to your account/client with ID " + accountInput + ", enter \"balance\", \"deposit\", \"withdraw\", \"previous\" or \"return all\": ");
             String transactionScanner = scanner.next();
 
             try {
@@ -52,6 +53,8 @@ public class ScannerService {
                     apiMethods.transactionType(accountInput, "balance");
                 } else if (transactionScanner.startsWith("previous")) {
                     apiMethods.specialRequests("previous");
+                } else if (transactionScanner.startsWith("return all")) {
+                    apiMethods.returnAccountsInClient(accountInput);
                 } else {
                     throw new InvalidInputException("You have entered an invalid input; please enter a valid word or check your spelling");
                 }

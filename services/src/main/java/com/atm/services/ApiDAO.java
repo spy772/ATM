@@ -6,6 +6,9 @@ import com.atm.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ApiDAO { // TODO: Change all the "Client" objects to "Account" objects
 
@@ -48,5 +51,17 @@ public class ApiDAO { // TODO: Change all the "Client" objects to "Account" obje
         Client client = new Client();
         apiMapper.createNewClient(client);
         return "You have successfully created a client with the id of " + client.getClientId();
+    }
+
+   public List<String> listAllAccountsInClient(int clientId) {
+        List<Account> accountList = apiMapper.getClientById(clientId);
+        List<String> printAccountList = new ArrayList<>();
+
+        for (int i = 0; i < accountList.size(); i++) {
+            printAccountList.add("Account ID: " + accountList.get(i).getAccountId() + ", Balance: " + accountList.get(i).getBalance() +
+                    ", Account Type: " + accountList.get(i).getAccountType().toString() + ", Number Of Transactions: " + accountList.get(i).getNumOfTransactions());
+        }
+
+        return printAccountList;
     }
 }
